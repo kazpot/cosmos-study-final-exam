@@ -2,6 +2,7 @@
 import { Params } from "../tollroad/params";
 import { SystemInfo } from "../tollroad/system_info";
 import { RoadOperator } from "../tollroad/road_operator";
+import { UserVault } from "../tollroad/user_vault";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "b9lab.tollroad.tollroad";
@@ -10,8 +11,9 @@ export const protobufPackage = "b9lab.tollroad.tollroad";
 export interface GenesisState {
   params: Params | undefined;
   systemInfo: SystemInfo | undefined;
-  /** this line is used by starport scaffolding # genesis/proto/state */
   roadOperatorList: RoadOperator[];
+  /** this line is used by starport scaffolding # genesis/proto/state */
+  userVaultList: UserVault[];
 }
 
 const baseGenesisState: object = {};
@@ -27,6 +29,9 @@ export const GenesisState = {
     for (const v of message.roadOperatorList) {
       RoadOperator.encode(v!, writer.uint32(26).fork()).ldelim();
     }
+    for (const v of message.userVaultList) {
+      UserVault.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
     return writer;
   },
 
@@ -35,6 +40,7 @@ export const GenesisState = {
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseGenesisState } as GenesisState;
     message.roadOperatorList = [];
+    message.userVaultList = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -49,6 +55,9 @@ export const GenesisState = {
             RoadOperator.decode(reader, reader.uint32())
           );
           break;
+        case 4:
+          message.userVaultList.push(UserVault.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -60,6 +69,7 @@ export const GenesisState = {
   fromJSON(object: any): GenesisState {
     const message = { ...baseGenesisState } as GenesisState;
     message.roadOperatorList = [];
+    message.userVaultList = [];
     if (object.params !== undefined && object.params !== null) {
       message.params = Params.fromJSON(object.params);
     } else {
@@ -76,6 +86,11 @@ export const GenesisState = {
     ) {
       for (const e of object.roadOperatorList) {
         message.roadOperatorList.push(RoadOperator.fromJSON(e));
+      }
+    }
+    if (object.userVaultList !== undefined && object.userVaultList !== null) {
+      for (const e of object.userVaultList) {
+        message.userVaultList.push(UserVault.fromJSON(e));
       }
     }
     return message;
@@ -96,12 +111,20 @@ export const GenesisState = {
     } else {
       obj.roadOperatorList = [];
     }
+    if (message.userVaultList) {
+      obj.userVaultList = message.userVaultList.map((e) =>
+        e ? UserVault.toJSON(e) : undefined
+      );
+    } else {
+      obj.userVaultList = [];
+    }
     return obj;
   },
 
   fromPartial(object: DeepPartial<GenesisState>): GenesisState {
     const message = { ...baseGenesisState } as GenesisState;
     message.roadOperatorList = [];
+    message.userVaultList = [];
     if (object.params !== undefined && object.params !== null) {
       message.params = Params.fromPartial(object.params);
     } else {
@@ -118,6 +141,11 @@ export const GenesisState = {
     ) {
       for (const e of object.roadOperatorList) {
         message.roadOperatorList.push(RoadOperator.fromPartial(e));
+      }
+    }
+    if (object.userVaultList !== undefined && object.userVaultList !== null) {
+      for (const e of object.userVaultList) {
+        message.userVaultList.push(UserVault.fromPartial(e));
       }
     }
     return message;

@@ -3,9 +3,10 @@ import { txClient, queryClient, MissingWalletError , registry} from './module'
 import { Params } from "./module/types/tollroad/params"
 import { RoadOperator } from "./module/types/tollroad/road_operator"
 import { SystemInfo } from "./module/types/tollroad/system_info"
+import { UserVault } from "./module/types/tollroad/user_vault"
 
 
-export { Params, RoadOperator, SystemInfo };
+export { Params, RoadOperator, SystemInfo, UserVault };
 
 async function initTxClient(vuexGetters) {
 	return await txClient(vuexGetters['common/wallet/signer'], {
@@ -47,11 +48,14 @@ const getDefaultState = () => {
 				SystemInfo: {},
 				RoadOperator: {},
 				RoadOperatorAll: {},
+				UserVault: {},
+				UserVaultAll: {},
 				
 				_Structure: {
 						Params: getStructure(Params.fromPartial({})),
 						RoadOperator: getStructure(RoadOperator.fromPartial({})),
 						SystemInfo: getStructure(SystemInfo.fromPartial({})),
+						UserVault: getStructure(UserVault.fromPartial({})),
 						
 		},
 		_Registry: registry,
@@ -103,6 +107,18 @@ export default {
 						(<any> params).query=null
 					}
 			return state.RoadOperatorAll[JSON.stringify(params)] ?? {}
+		},
+				getUserVault: (state) => (params = { params: {}}) => {
+					if (!(<any> params).query) {
+						(<any> params).query=null
+					}
+			return state.UserVault[JSON.stringify(params)] ?? {}
+		},
+				getUserVaultAll: (state) => (params = { params: {}}) => {
+					if (!(<any> params).query) {
+						(<any> params).query=null
+					}
+			return state.UserVaultAll[JSON.stringify(params)] ?? {}
 		},
 				
 		getTypeStructure: (state) => (type) => {
@@ -230,6 +246,69 @@ export default {
 		},
 		
 		
+		
+		
+		 		
+		
+		
+		async QueryUserVault({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params, query=null }) {
+			try {
+				const key = params ?? {};
+				const queryClient=await initQueryClient(rootGetters)
+				let value= (await queryClient.queryUserVault( key.owner,  key.roadOperatorIndex,  key.token)).data
+				
+					
+				commit('QUERY', { query: 'UserVault', key: { params: {...key}, query}, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryUserVault', payload: { options: { all }, params: {...key},query }})
+				return getters['getUserVault']( { params: {...key}, query}) ?? {}
+			} catch (e) {
+				throw new Error('QueryClient:QueryUserVault API Node Unavailable. Could not perform query: ' + e.message)
+				
+			}
+		},
+		
+		
+		
+		
+		 		
+		
+		
+		async QueryUserVaultAll({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params, query=null }) {
+			try {
+				const key = params ?? {};
+				const queryClient=await initQueryClient(rootGetters)
+				let value= (await queryClient.queryUserVaultAll(query)).data
+				
+					
+				while (all && (<any> value).pagination && (<any> value).pagination.next_key!=null) {
+					let next_values=(await queryClient.queryUserVaultAll({...query, 'pagination.key':(<any> value).pagination.next_key})).data
+					value = mergeResults(value, next_values);
+				}
+				commit('QUERY', { query: 'UserVaultAll', key: { params: {...key}, query}, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryUserVaultAll', payload: { options: { all }, params: {...key},query }})
+				return getters['getUserVaultAll']( { params: {...key}, query}) ?? {}
+			} catch (e) {
+				throw new Error('QueryClient:QueryUserVaultAll API Node Unavailable. Could not perform query: ' + e.message)
+				
+			}
+		},
+		
+		
+		async sendMsgUpdateRoadOperator({ rootGetters }, { value, fee = [], memo = '' }) {
+			try {
+				const txClient=await initTxClient(rootGetters)
+				const msg = await txClient.msgUpdateRoadOperator(value)
+				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, 
+	gas: "200000" }, memo})
+				return result
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgUpdateRoadOperator:Init Could not initialize signing client. Wallet is required.')
+				}else{
+					throw new Error('TxClient:MsgUpdateRoadOperator:Send Could not broadcast Tx: '+ e.message)
+				}
+			}
+		},
 		async sendMsgCreateRoadOperator({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
 				const txClient=await initTxClient(rootGetters)
@@ -260,22 +339,20 @@ export default {
 				}
 			}
 		},
-		async sendMsgUpdateRoadOperator({ rootGetters }, { value, fee = [], memo = '' }) {
+		
+		async MsgUpdateRoadOperator({ rootGetters }, { value }) {
 			try {
 				const txClient=await initTxClient(rootGetters)
 				const msg = await txClient.msgUpdateRoadOperator(value)
-				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, 
-	gas: "200000" }, memo})
-				return result
+				return msg
 			} catch (e) {
 				if (e == MissingWalletError) {
 					throw new Error('TxClient:MsgUpdateRoadOperator:Init Could not initialize signing client. Wallet is required.')
-				}else{
-					throw new Error('TxClient:MsgUpdateRoadOperator:Send Could not broadcast Tx: '+ e.message)
+				} else{
+					throw new Error('TxClient:MsgUpdateRoadOperator:Create Could not create message: ' + e.message)
 				}
 			}
 		},
-		
 		async MsgCreateRoadOperator({ rootGetters }, { value }) {
 			try {
 				const txClient=await initTxClient(rootGetters)
@@ -299,19 +376,6 @@ export default {
 					throw new Error('TxClient:MsgDeleteRoadOperator:Init Could not initialize signing client. Wallet is required.')
 				} else{
 					throw new Error('TxClient:MsgDeleteRoadOperator:Create Could not create message: ' + e.message)
-				}
-			}
-		},
-		async MsgUpdateRoadOperator({ rootGetters }, { value }) {
-			try {
-				const txClient=await initTxClient(rootGetters)
-				const msg = await txClient.msgUpdateRoadOperator(value)
-				return msg
-			} catch (e) {
-				if (e == MissingWalletError) {
-					throw new Error('TxClient:MsgUpdateRoadOperator:Init Could not initialize signing client. Wallet is required.')
-				} else{
-					throw new Error('TxClient:MsgUpdateRoadOperator:Create Could not create message: ' + e.message)
 				}
 			}
 		},

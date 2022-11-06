@@ -48,12 +48,31 @@ export interface TollroadQueryAllRoadOperatorResponse {
   pagination?: V1Beta1PageResponse;
 }
 
+export interface TollroadQueryAllUserVaultResponse {
+  userVault?: TollroadUserVault[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
 export interface TollroadQueryGetRoadOperatorResponse {
   roadOperator?: TollroadRoadOperator;
 }
 
 export interface TollroadQueryGetSystemInfoResponse {
   SystemInfo?: TollroadSystemInfo;
+}
+
+export interface TollroadQueryGetUserVaultResponse {
+  userVault?: TollroadUserVault;
 }
 
 /**
@@ -75,6 +94,15 @@ export interface TollroadRoadOperator {
 export interface TollroadSystemInfo {
   /** @format uint64 */
   nextOperatorId?: string;
+}
+
+export interface TollroadUserVault {
+  owner?: string;
+  roadOperatorIndex?: string;
+  token?: string;
+
+  /** @format uint64 */
+  balance?: string;
 }
 
 /**
@@ -405,6 +433,48 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   querySystemInfo = (params: RequestParams = {}) =>
     this.request<TollroadQueryGetSystemInfoResponse, RpcStatus>({
       path: `/b9lab/toll-road/tollroad/system_info`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryUserVaultAll
+   * @summary Queries a list of UserVault items.
+   * @request GET:/b9lab/toll-road/tollroad/user_vault
+   */
+  queryUserVaultAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<TollroadQueryAllUserVaultResponse, RpcStatus>({
+      path: `/b9lab/toll-road/tollroad/user_vault`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryUserVault
+   * @summary Queries a UserVault by index.
+   * @request GET:/b9lab/toll-road/tollroad/user_vault/{owner}/{roadOperatorIndex}/{token}
+   */
+  queryUserVault = (owner: string, roadOperatorIndex: string, token: string, params: RequestParams = {}) =>
+    this.request<TollroadQueryGetUserVaultResponse, RpcStatus>({
+      path: `/b9lab/toll-road/tollroad/user_vault/${owner}/${roadOperatorIndex}/${token}`,
       method: "GET",
       format: "json",
       ...params,
