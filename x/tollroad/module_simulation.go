@@ -36,6 +36,18 @@ const (
 	// TODO: Determine the simulation weight value
 	defaultWeightMsgDeleteRoadOperator int = 100
 
+	opWeightMsgCreateUserVault = "op_weight_msg_create_user_vault"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgCreateUserVault int = 100
+
+	opWeightMsgUpdateUserVault = "op_weight_msg_update_user_vault"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgUpdateUserVault int = 100
+
+	opWeightMsgDeleteUserVault = "op_weight_msg_delete_user_vault"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgDeleteUserVault int = 100
+
 	// this line is used by starport scaffolding # simapp/module/const
 )
 
@@ -111,6 +123,39 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 	operations = append(operations, simulation.NewWeightedOperation(
 		weightMsgDeleteRoadOperator,
 		tollroadsimulation.SimulateMsgDeleteRoadOperator(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
+	var weightMsgCreateUserVault int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgCreateUserVault, &weightMsgCreateUserVault, nil,
+		func(_ *rand.Rand) {
+			weightMsgCreateUserVault = defaultWeightMsgCreateUserVault
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgCreateUserVault,
+		tollroadsimulation.SimulateMsgCreateUserVault(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
+	var weightMsgUpdateUserVault int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgUpdateUserVault, &weightMsgUpdateUserVault, nil,
+		func(_ *rand.Rand) {
+			weightMsgUpdateUserVault = defaultWeightMsgUpdateUserVault
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgUpdateUserVault,
+		tollroadsimulation.SimulateMsgUpdateUserVault(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
+	var weightMsgDeleteUserVault int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgDeleteUserVault, &weightMsgDeleteUserVault, nil,
+		func(_ *rand.Rand) {
+			weightMsgDeleteUserVault = defaultWeightMsgDeleteUserVault
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgDeleteUserVault,
+		tollroadsimulation.SimulateMsgDeleteUserVault(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
 	// this line is used by starport scaffolding # simapp/module/operation

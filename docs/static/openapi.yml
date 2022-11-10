@@ -30871,9 +30871,15 @@ definitions:
     properties:
       index:
         type: string
+  b9lab.tollroad.tollroad.MsgCreateUserVaultResponse:
+    type: object
   b9lab.tollroad.tollroad.MsgDeleteRoadOperatorResponse:
     type: object
+  b9lab.tollroad.tollroad.MsgDeleteUserVaultResponse:
+    type: object
   b9lab.tollroad.tollroad.MsgUpdateRoadOperatorResponse:
+    type: object
+  b9lab.tollroad.tollroad.MsgUpdateUserVaultResponse:
     type: object
   b9lab.tollroad.tollroad.Params:
     type: object

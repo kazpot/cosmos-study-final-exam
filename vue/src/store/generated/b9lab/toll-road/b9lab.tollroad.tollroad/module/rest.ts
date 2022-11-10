@@ -24,9 +24,15 @@ export interface TollroadMsgCreateRoadOperatorResponse {
   index?: string;
 }
 
+export type TollroadMsgCreateUserVaultResponse = object;
+
 export type TollroadMsgDeleteRoadOperatorResponse = object;
 
+export type TollroadMsgDeleteUserVaultResponse = object;
+
 export type TollroadMsgUpdateRoadOperatorResponse = object;
+
+export type TollroadMsgUpdateUserVaultResponse = object;
 
 /**
  * Params defines the parameters for the module.

@@ -4,14 +4,20 @@ import { StdFee } from "@cosmjs/launchpad";
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { Registry, OfflineSigner, EncodeObject, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
-import { MsgUpdateRoadOperator } from "./types/tollroad/tx";
+import { MsgDeleteUserVault } from "./types/tollroad/tx";
 import { MsgCreateRoadOperator } from "./types/tollroad/tx";
+import { MsgUpdateUserVault } from "./types/tollroad/tx";
+import { MsgUpdateRoadOperator } from "./types/tollroad/tx";
+import { MsgCreateUserVault } from "./types/tollroad/tx";
 import { MsgDeleteRoadOperator } from "./types/tollroad/tx";
 
 
 const types = [
-  ["/b9lab.tollroad.tollroad.MsgUpdateRoadOperator", MsgUpdateRoadOperator],
+  ["/b9lab.tollroad.tollroad.MsgDeleteUserVault", MsgDeleteUserVault],
   ["/b9lab.tollroad.tollroad.MsgCreateRoadOperator", MsgCreateRoadOperator],
+  ["/b9lab.tollroad.tollroad.MsgUpdateUserVault", MsgUpdateUserVault],
+  ["/b9lab.tollroad.tollroad.MsgUpdateRoadOperator", MsgUpdateRoadOperator],
+  ["/b9lab.tollroad.tollroad.MsgCreateUserVault", MsgCreateUserVault],
   ["/b9lab.tollroad.tollroad.MsgDeleteRoadOperator", MsgDeleteRoadOperator],
   
 ];
@@ -45,8 +51,11 @@ const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions =
 
   return {
     signAndBroadcast: (msgs: EncodeObject[], { fee, memo }: SignAndBroadcastOptions = {fee: defaultFee, memo: ""}) => client.signAndBroadcast(address, msgs, fee,memo),
-    msgUpdateRoadOperator: (data: MsgUpdateRoadOperator): EncodeObject => ({ typeUrl: "/b9lab.tollroad.tollroad.MsgUpdateRoadOperator", value: MsgUpdateRoadOperator.fromPartial( data ) }),
+    msgDeleteUserVault: (data: MsgDeleteUserVault): EncodeObject => ({ typeUrl: "/b9lab.tollroad.tollroad.MsgDeleteUserVault", value: MsgDeleteUserVault.fromPartial( data ) }),
     msgCreateRoadOperator: (data: MsgCreateRoadOperator): EncodeObject => ({ typeUrl: "/b9lab.tollroad.tollroad.MsgCreateRoadOperator", value: MsgCreateRoadOperator.fromPartial( data ) }),
+    msgUpdateUserVault: (data: MsgUpdateUserVault): EncodeObject => ({ typeUrl: "/b9lab.tollroad.tollroad.MsgUpdateUserVault", value: MsgUpdateUserVault.fromPartial( data ) }),
+    msgUpdateRoadOperator: (data: MsgUpdateRoadOperator): EncodeObject => ({ typeUrl: "/b9lab.tollroad.tollroad.MsgUpdateRoadOperator", value: MsgUpdateRoadOperator.fromPartial( data ) }),
+    msgCreateUserVault: (data: MsgCreateUserVault): EncodeObject => ({ typeUrl: "/b9lab.tollroad.tollroad.MsgCreateUserVault", value: MsgCreateUserVault.fromPartial( data ) }),
     msgDeleteRoadOperator: (data: MsgDeleteRoadOperator): EncodeObject => ({ typeUrl: "/b9lab.tollroad.tollroad.MsgDeleteRoadOperator", value: MsgDeleteRoadOperator.fromPartial( data ) }),
     
   };

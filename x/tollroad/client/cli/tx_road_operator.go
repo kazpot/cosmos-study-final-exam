@@ -11,7 +11,7 @@ import (
 
 func CmdCreateRoadOperator() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-road-operator [index] [name] [token] [active]",
+		Use:   "create-road-operator [name] [token] [active]",
 		Short: "Create a new RoadOperator",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {

@@ -11,6 +11,9 @@ service Msg {
       rpc CreateRoadOperator(MsgCreateRoadOperator) returns (MsgCreateRoadOperatorResponse);
   rpc UpdateRoadOperator(MsgUpdateRoadOperator) returns (MsgUpdateRoadOperatorResponse);
   rpc DeleteRoadOperator(MsgDeleteRoadOperator) returns (MsgDeleteRoadOperatorResponse);
+  rpc CreateUserVault(MsgCreateUserVault) returns (MsgCreateUserVaultResponse);
+  rpc UpdateUserVault(MsgUpdateUserVault) returns (MsgUpdateUserVaultResponse);
+  rpc DeleteUserVault(MsgDeleteUserVault) returns (MsgDeleteUserVaultResponse);
 // this line is used by starport scaffolding # proto/tx/rpc
 }
 
@@ -39,5 +42,34 @@ message MsgDeleteRoadOperator {
   string index = 2;
 }
 message MsgDeleteRoadOperatorResponse {}
+
+message MsgCreateUserVault {
+  string creator = 1;
+  string roadOperatorIndex = 2;
+  string token = 3;
+  uint64 balance = 4;
+}
+
+message MsgCreateUserVaultResponse {
+}
+
+message MsgUpdateUserVault {
+  string creator = 1;
+  string roadOperatorIndex = 2;
+  string token = 3;
+  uint64 balance = 4;
+}
+
+message MsgUpdateUserVaultResponse {
+}
+
+message MsgDeleteUserVault {
+  string creator = 1;
+  string roadOperatorIndex = 2;
+  string token = 3;
+}
+
+message MsgDeleteUserVaultResponse {
+}
 
 // this line is used by starport scaffolding # proto/tx/message
