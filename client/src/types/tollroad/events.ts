@@ -5,11 +5,15 @@ export type RoadOperatorCreatedEvent = Event
 export const getCreateRoadOperatorEvent = (
     log: Log,
 ): RoadOperatorCreatedEvent | undefined => {
-    throw "Not implemented"
+    return log.events!.find(
+        (event: Event) => event.type === "new-road-operator-created",
+    )
 }
 
 export const getCreatedRoadOperatorId = (
     createdRoadOperatorEvent: RoadOperatorCreatedEvent,
 ): string => {
-    throw "Not implemented"
+    return createdRoadOperatorEvent.attributes.find(
+        (attribute: Attribute) => attribute.key === "road-operator-index",
+    ).value
 }

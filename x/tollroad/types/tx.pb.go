@@ -408,7 +408,6 @@ func (m *MsgCreateUserVault) GetBalance() uint64 {
 }
 
 type MsgCreateUserVaultResponse struct {
-	Index string
 }
 
 func (m *MsgCreateUserVaultResponse) Reset()         { *m = MsgCreateUserVaultResponse{} }
