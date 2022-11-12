@@ -1,6 +1,7 @@
 package roadoperatorstudent_test
 
 import (
+	"fmt"
 	"math/rand"
 	"strconv"
 	"testing"
@@ -24,6 +25,9 @@ func TestRoadOperatorMsgServerCreate(t *testing.T) {
 	srv := keeper.NewMsgServerImpl(*k)
 	wctx := sdk.WrapSDKContext(ctx)
 	creator := "A"
+	systemInfo, found := k.GetSystemInfo(ctx)
+	fmt.Println(systemInfo)
+	fmt.Println(found)
 	for i := 1; i < 6; i++ {
 		expected := &types.MsgCreateRoadOperator{
 			Creator: creator,

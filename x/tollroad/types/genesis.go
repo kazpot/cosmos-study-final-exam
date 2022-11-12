@@ -10,7 +10,9 @@ const DefaultIndex uint64 = 1
 // DefaultGenesis returns the default Capability genesis state
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
-		SystemInfo:       SystemInfo{},
+		SystemInfo: SystemInfo{
+			NextOperatorId: DefaultIndex,
+		},
 		RoadOperatorList: []RoadOperator{},
 		UserVaultList:    []UserVault{},
 		// this line is used by starport scaffolding # genesis/types/default
