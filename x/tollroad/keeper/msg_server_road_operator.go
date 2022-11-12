@@ -9,6 +9,15 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
+const (
+	RoadOperatorCreatedEventType      = "new-road-operator-created"
+	RoadOperatorCreatedEventCreator   = "creator"
+	RoadOperatorCreatedEventGameIndex = "road-operator-index"
+	RoadOperatorCreatedEventName      = "name"
+	RoadOperatorCreatedEventToken     = "token"
+	RoadOperatorCreatedEventActive    = "active"
+)
+
 func (k msgServer) CreateRoadOperator(goCtx context.Context, msg *types.MsgCreateRoadOperator) (*types.MsgCreateRoadOperatorResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
@@ -46,12 +55,12 @@ func (k msgServer) CreateRoadOperator(goCtx context.Context, msg *types.MsgCreat
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
-			types.RoadOperatorCreatedEventType,
-			sdk.NewAttribute(types.RoadOperatorCreatedEventCreator, msg.Creator),
-			sdk.NewAttribute(types.RoadOperatorCreatedEventGameIndex, nextIndex),
-			sdk.NewAttribute(types.RoadOperatorCreatedEventName, msg.Name),
-			sdk.NewAttribute(types.RoadOperatorCreatedEventToken, msg.Token),
-			sdk.NewAttribute(types.RoadOperatorCreatedEventActive, strconv.FormatBool(msg.Active)),
+			RoadOperatorCreatedEventType,
+			sdk.NewAttribute(RoadOperatorCreatedEventCreator, msg.Creator),
+			sdk.NewAttribute(RoadOperatorCreatedEventGameIndex, nextIndex),
+			sdk.NewAttribute(RoadOperatorCreatedEventName, msg.Name),
+			sdk.NewAttribute(RoadOperatorCreatedEventToken, msg.Token),
+			sdk.NewAttribute(RoadOperatorCreatedEventActive, strconv.FormatBool(msg.Active)),
 		))
 
 	return &types.MsgCreateRoadOperatorResponse{Index: nextIndex}, nil
