@@ -1,8 +1,12 @@
 accounts:
   - name: alice
-    coins: ["20000token", "200000000stake"]
+    coins: ["20000token1esw95jtsprjk4vh09ctjdmz5ttm2qzsquzmk7e", "200000000stake"]
+    # cosmos128vq9mrzs6nv948rrfjrn8gveuj6378u95c76t
+    mnemonic: "giraffe scheme spend boss tip town dutch critic general mimic drastic sugar have ginger april crop pepper forum sorry rate basic relief once network"
   - name: bob
-    coins: ["10000token", "100000000stake"]
+    coins: ["10000token1esw95jtsprjk4vh09ctjdmz5ttm2qzsquzmk7e", "100000000stake"]
+    # cosmos164r8hunccpeaw8l33jnudjzp0luljhye56zazp
+    mnemonic: "tortoise impulse asset right actual seven where random write rich patrol bright jungle body nurse slide feature magic gloom parrot size source pepper believe"
 validator:
   name: alice
   staked: "100000000stake"
@@ -13,4 +17,6 @@ client:
     path: "vue/src/store"
 faucet:
   name: bob
-  coins: ["5token", "100000stake"]
+  coins: ["5token1esw95jtsprjk4vh09ctjdmz5ttm2qzsquzmk7e", "100000stake"]
+genesis:
+  chain_id: "tollroad"
